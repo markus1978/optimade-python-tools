@@ -74,6 +74,13 @@ class ServerConfig(BaseSettings):
         "test_server",
         description="ID of /links endpoint resource for the chosen default OPTIMADE implementation (only relevant for the index meta-database)",
     )
+    root_path: Optional[str] = Field(
+        None,
+        description=(
+            "Fastapi root_path app parameter. This can be used to serve the API under a "
+            "path prefix behind a proxy or as a sub application of another fastapi app."
+        ),
+    )
     base_url: Optional[str] = Field(
         None, description="Base URL for this implementation"
     )
