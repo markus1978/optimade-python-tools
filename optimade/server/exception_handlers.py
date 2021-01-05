@@ -14,6 +14,7 @@ from optimade.models import OptimadeError, ErrorResponse, ErrorSource
 from optimade.server.config import CONFIG
 from optimade.server.logger import LOGGER
 from optimade.server.routers.utils import meta_values
+from optimade.server.exceptions import BadRequest
 
 
 def general_exception(
@@ -91,6 +92,10 @@ def validation_exception_handler(request: Request, exc: ValidationError):
 
 
 def grammar_not_implemented_handler(request: Request, exc: VisitError):
+    orig_exc = getattr(exc, 'orig_exc', None)
+    if isinstance(orig_exc, BadRequest):
+        return general_exception(request, orig_exc)
+
     rule = getattr(exc.obj, "data", getattr(exc.obj, "type", str(exc)))
 
     status = 501
